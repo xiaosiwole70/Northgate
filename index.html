@@ -793,6 +793,202 @@ body.home-mode .page::after{height:0;}
 .si-p{font-size:13px;font-weight:800;color:#27AE60;margin-bottom:5px;}
 .si-b{border:none;border-radius:9px;padding:6px 16px;background:#C0392B;color:#fff;
   font-size:12.5px;font-weight:700;font-family:inherit;cursor:pointer;}
+
+/* ==========================================================
+   开局流程 UI（STEP 向导 v2）
+   —— 编辑式排版：编号标题 / 选项卡左标线 / 底部吸附操作区
+   ========================================================== */
+
+/* 顶部报头：AMERICAN HIGH SCHOOL 式的小字眉标 */
+.setup-mast{
+  position:sticky;top:0;z-index:6;
+  background:linear-gradient(180deg,var(--paper) 82%,rgba(255,250,245,0));
+  padding:2px 0 10px;margin-bottom:2px;
+}
+.setup-mast .sm-eyebrow{
+  font-size:9.5px;font-weight:700;letter-spacing:.26em;color:#A2968A;
+  text-transform:uppercase;
+}
+.setup-mast .sm-title{
+  font-family:var(--font-display);
+  font-size:23px;font-weight:800;letter-spacing:.02em;
+  color:#3D3530;line-height:1.22;margin-top:3px;
+}
+.setup-mast .sm-meta{
+  display:flex;align-items:baseline;gap:7px;margin-top:6px;
+  font-size:10.5px;font-weight:700;letter-spacing:.14em;color:#B3A79B;
+}
+.setup-mast .sm-meta i{font-style:normal;color:var(--accent);}
+.setup-mast .sm-meta .sm-line{flex:1;height:1px;background:var(--line);}
+
+/* 进度：细线 + 分段刻度（替代原来的六根粗色条） */
+.segbar{display:flex;gap:5px;margin-top:9px;}
+.segbar .sg{
+  flex:1;height:2px;border-radius:2px;background:#E7DFD5;
+  transition:background .25s,opacity .25s;
+}
+.segbar .sg.done{background:#C9BCAE;}
+.segbar .sg.on{background:var(--accent);box-shadow:0 0 0 3px rgba(192,57,43,.10);}
+
+/* STEP 编号标题 */
+.step-hd{margin:4px 0 2px;}
+.step-hd .sh-no{
+  font-family:var(--font-display);
+  font-size:10px;font-weight:800;letter-spacing:.24em;color:var(--accent);
+  display:block;margin-bottom:4px;
+}
+.step-hd .sh-tt{
+  font-family:var(--font-display);
+  font-size:20px;font-weight:800;letter-spacing:.02em;color:#3D3530;line-height:1.3;
+}
+.step-hd .sh-sub{
+  font-size:12.5px;color:#8A7C6E;line-height:1.6;margin-top:5px;
+}
+
+/* 选项卡：去掉全包围边线，改用左侧色标 + 序号 */
+.opt-list{display:flex;flex-direction:column;gap:0;margin-top:2px;}
+
+.opt-card{
+  position:relative;display:flex;gap:11px;align-items:flex-start;
+  padding:13px 6px 13px 0;cursor:pointer;
+  border-bottom:1px solid #EDE5DC;
+  transition:background .15s;
+}
+.opt-card:last-child{border-bottom:none;}
+.opt-card .oc-idx{
+  flex:0 0 17px;font-family:var(--font-display);
+  font-size:10.5px;font-weight:800;letter-spacing:.05em;
+  color:#BDB1A4;line-height:1.9;text-align:left;
+}
+.opt-card .oc-main{flex:1;min-width:0;}
+.opt-card .oc-t{
+  font-size:14.5px;font-weight:700;color:#3D3530;line-height:1.42;
+  display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+}
+.opt-card .oc-t .oc-en{
+  font-family:var(--font-display);
+  font-size:9.5px;font-weight:700;letter-spacing:.14em;
+  color:#C3B6A8;text-transform:uppercase;
+}
+.opt-card .oc-d{
+  font-size:12.5px;color:#8A7E74;line-height:1.62;margin-top:4px;
+}
+.opt-card .oc-tag{
+  font-size:9.5px;font-weight:800;letter-spacing:.08em;
+  padding:1px 6px;border-radius:4px;
+  background:#FBEDEC;color:#C0392B;border:1px solid #F0CFCB;
+}
+.opt-card .oc-money{
+  font-size:11.5px;font-weight:700;color:#9A8E84;
+  font-family:var(--font-display);letter-spacing:.04em;
+}
+/* 选中态：左侧红线 + 极浅底 */
+.opt-card::before{
+  content:'';position:absolute;left:-13px;top:9px;bottom:9px;width:2.5px;
+  border-radius:2px;background:transparent;transition:background .18s;
+}
+.opt-card:hover::before{background:#EEDFD3;}
+.opt-card.on{background:linear-gradient(90deg,rgba(192,57,43,.045),rgba(192,57,43,0) 62%);}
+.opt-card.on::before{background:var(--accent);}
+.opt-card.on .oc-idx{color:var(--accent);}
+.opt-card.on .oc-t{color:#2E2621;}
+.opt-card:active{background:#FBF4EE;}
+
+/* 角色档案：字段改为「眉标 + 值」的排版，输入框去框线只留底线 */
+.pf-field{padding:12px 0 4px;border-bottom:1px solid #EFE8DF;}
+.pf-field:last-of-type{border-bottom:none;}
+.pf-lab{
+  font-size:9.5px;font-weight:800;letter-spacing:.2em;color:#A2968A;
+  text-transform:uppercase;display:block;margin-bottom:6px;
+}
+.pf-field .set-in{
+  border:none;border-bottom:1px solid #E4DCD2;border-radius:0;
+  background:transparent;padding:2px 0 5px;font-size:15px;margin:0;
+  font-weight:600;color:#332B26;
+}
+.pf-field .set-in:focus{border-bottom-color:var(--accent);}
+.pf-field .set-note{font-size:11px;color:#A99C90;margin-top:4px;}
+.pf-field .chips{margin-top:7px;}
+
+/* chips 更轻：透明底细边，选中变实心 */
+.pf-field .chip, .setup-view .chip{
+  padding:4px 10px;border-radius:999px;
+  border:1px solid #E4DCD2;background:transparent;
+  font-size:12px;color:#7A6E63;font-weight:600;line-height:1.4;
+}
+.pf-field .chip.on, .setup-view .chip.on{
+  background:#3D3530;border-color:#3D3530;color:#FFFAF5;font-weight:700;
+}
+.pf-field .chip:active, .setup-view .chip:active{transform:scale(.96);}
+
+/* 总览：改为两列的「档案表」 */
+.sum-grid{display:block;}
+.sum-row{
+  display:flex;align-items:baseline;gap:10px;
+  padding:8px 0;border-bottom:1px dotted #E7DFD5;
+}
+.sum-row:last-child{border-bottom:none;}
+.sum-row>span{
+  flex:0 0 84px;font-size:11px;font-weight:700;letter-spacing:.06em;
+  color:#A2968A;
+}
+.sum-row>b{
+  flex:1;text-align:left;font-size:13.5px;font-weight:700;color:#332B26;
+  line-height:1.5;
+}
+.sum-hl{
+  margin-top:12px;padding:13px 14px;border-radius:12px;
+  background:#FBF6EF;border:1px solid #EFE5D8;border-left:3px solid var(--accent);
+}
+.sum-hl .shl-k{font-size:10px;font-weight:800;letter-spacing:.16em;color:#A2968A;}
+.sum-hl .shl-v{
+  font-family:var(--font-display);
+  font-size:22px;font-weight:800;color:#3D3530;margin-top:3px;letter-spacing:.01em;
+}
+.sum-hl .shl-s{font-size:11.5px;color:#9A8E84;margin-top:3px;line-height:1.5;}
+
+/* 底部操作条：吸附 + 主按钮右对齐 */
+.setup-foot{
+  background:linear-gradient(180deg,rgba(255,250,245,0),var(--paper) 30%);
+  border-top:1px solid #EDE5DC;
+  padding:10px 0 calc(10px + env(safe-area-inset-bottom,0px));
+}
+.setup-foot .btn-main{
+  text-align:center;border:none;border-radius:12px;
+  background:#3D3530;color:#FFFAF5;
+  padding:13px 16px;box-shadow:0 4px 14px rgba(61,53,48,.22);
+}
+.setup-foot .btn-main .opt-t{color:#FFFAF5;font-size:14px;font-weight:700;}
+.setup-foot .btn-main .opt-h{color:rgba(255,250,245,.58);font-size:11px;margin-top:2px;}
+.setup-foot .btn-main:active{transform:scale(.985);background:#332B26;}
+.setup-foot .btn-ghost{
+  border:none;background:transparent;color:#9A8E84;
+  font-size:13px;font-weight:600;padding:13px 10px;min-width:auto;
+}
+.setup-foot .btn-ghost:active{color:var(--accent);}
+
+/* 纯文字动作（全部随机 / 换一个） */
+.rand-btn{
+  width:auto;margin:16px 0 2px;padding:6px 0;border-radius:0;
+  border:none;border-bottom:1px dashed #DCD2C7;background:transparent;
+  font-size:12px;font-weight:700;color:#A2968A;letter-spacing:.04em;
+}
+.rand-btn:active{color:var(--accent);border-bottom-color:var(--accent);}
+
+/* 深色皮肤适配 */
+body[data-skin="night"] .opt-card{border-bottom-color:#332F3A;}
+body[data-skin="night"] .opt-card.on{background:linear-gradient(90deg,rgba(192,57,43,.14),rgba(192,57,43,0) 62%);}
+body[data-skin="night"] .pf-field{border-bottom-color:#332F3A;}
+body[data-skin="night"] .pf-field .set-in{border-bottom-color:#3D3845;color:#EDE8E1;}
+body[data-skin="night"] .sum-row{border-bottom-color:#332F3A;}
+body[data-skin="night"] .sum-hl{background:#26242E;border-color:#3A3542;}
+body[data-skin="night"] .pf-field .chip,
+body[data-skin="night"] .setup-view .chip{border-color:#3D3845;color:#B8AFA4;}
+body[data-skin="night"] .pf-field .chip.on,
+body[data-skin="night"] .setup-view .chip.on{background:#EDE8E1;border-color:#EDE8E1;color:#201E28;}
+body[data-skin="night"] .setup-foot .btn-main{background:#EDE8E1;color:#201E28;}
+body[data-skin="night"] .setup-foot .btn-main .opt-t{color:#201E28;}
+body[data-skin="night"] .setup-mast{background:linear-gradient(180deg,#201E28 82%,rgba(32,30,40,0));}
 .si-b:active{transform:scale(.95);}
 /* ===== 选项瘦身 ===== */
 #choices{padding:10px 13px 12px;background:linear-gradient(180deg,rgba(255,250,245,0),#FFFAF5 26%);}
@@ -5242,19 +5438,26 @@ function renderSetupView(){
   if(!NEWC) resetNewc();
   var step=NEWC.step||1;
   var names=['难度','身份','家庭','档案','总览','开始'];
-  var h='<div class="setup-steps">';
+  var ens=['Difficulty','Identity','Family','Profile','Summary','Start'];
+  /* 顶部报头 + 细分段进度 */
+  var h='<div class="setup-mast">'
+    +'<div class="sm-eyebrow">Northgate High School</div>'
+    +'<div class="sm-title">'+(step>=6?'走进校园':'建立你的人生')+'</div>'
+    +'<div class="sm-meta"><i>'+String(step).padStart(2,'0')+'</i>'
+      +'<span>'+esc(ens[step-1]||'')+'</span><span class="sm-line"></span>'
+      +'<span>06</span></div>'
+    +'<div class="segbar">';
   for(var i=0;i<6;i++){
-    var cls='ss-dot'+(i+1<step?' done':(i+1===step?' on':''));
-    h+='<div class="'+cls+'"><i>'+(i+1)+'</i><span>'+names[i]+'</span></div>';
+    h+='<span class="sg'+(i+1<step?' done':(i+1===step?' on':''))+'"></span>';
   }
-  h+='</div>';
+  h+='</div></div>';
+
   if(step===1) h+=setupDiffBody();
   else if(step===2) h+=setupIdentBody();
   else if(step===3) h+=setupFamBody();
   else if(step===4) h+=setupProfileBody();
   else h+=setupSummaryBody();
 
-  /* 第 1 步没有「上一步」；第 5 步用「进入校园」 */
   var foot='<div class="setup-foot">';
   if(step>1) foot+='<button class="btn-ghost" id="sBack"><span class="opt-t">上一步</span></button>';
   if(step<5) foot+='<button class="btn-main" id="sNext"><span class="opt-t">下一步</span><span class="opt-h">'+esc(names[step]||'继续')+'</span></button>';
@@ -5262,52 +5465,64 @@ function renderSetupView(){
   foot+='</div>';
 
   return '<div class="view setup-view"><div class="setup-scroll">'
-    + '<div class="view-h"><span class="view-t">开局 · 第 '+step+'/6 步</span></div>'
     + h
     + '</div>' + foot + '</div>';
 }
 
 /* ---- 第1步：难度 ---- */
 function setupDiffBody(){
-  var h='<div class="card"><div class="view-t">★ 选择你的高中难度</div>'
-    +'<div class="set-tip">Northgate High School · 1800 名学生。你能爬到哪一层？</div>'
-    +'<div class="bg-list">';
-  ['E','N','H','NI'].forEach(function(k){
+  var h='<div class="step-hd"><span class="sh-no">STEP 01</span>'
+    +'<div class="sh-tt">你能爬到哪一层</div>'
+    +'<div class="sh-sub">Northgate High · 1800 名学生。难度决定初始金钱、NPC 好感、流言传播速度与容错率。</div></div>'
+    +'<div class="opt-list">';
+  ['E','N','H','NI'].forEach(function(k,idx){
     var d=DIFF[k];
-    h+='<div class="bg-item'+(NEWC.difficulty===k?' on':'')+'" data-diff="'+k+'">'
-      +'<div class="bg-t">'+esc(d.name)+(d.rec?' <span class="tag-rec">推荐</span>':'')+'</div>'
-      +'<div class="bg-d">'+esc(d.desc)+'</div></div>';
+    h+='<div class="opt-card'+(NEWC.difficulty===k?' on':'')+'" data-diff="'+k+'">'
+      +'<span class="oc-idx">'+String(idx+1).padStart(2,'0')+'</span>'
+      +'<div class="oc-main">'
+      +'<div class="oc-t">'+esc(d.name)+(d.rec?' <span class="oc-tag">推荐</span>':'')+'</div>'
+      +'<div class="oc-d">'+esc(d.desc)+'</div>'
+      +'</div></div>';
   });
-  h+='</div><div class="set-tip dim">难度将影响初始金钱、NPC 好感、流言伤害与事件容错率。选定即进入下一步。</div></div>';
+  h+='</div><div class="set-tip dim">选定即进入下一步。</div>';
   return h;
 }
 
 /* ---- 第2步：身份 ---- */
 function setupIdentBody(){
-  var h='<div class="card"><div class="view-t">★ 选择你的初始身份</div>'
-    +'<div class="set-tip">你在 Northgate 的第一步，从别人怎么看你开始。</div>'
-    +'<div class="bg-list">';
-  Object.keys(IDENT).forEach(function(k){
+  var h='<div class="step-hd"><span class="sh-no">STEP 02</span>'
+    +'<div class="sh-tt">别人怎么看你</div>'
+    +'<div class="sh-sub">你在 Northgate 的第一步，从别人怎么看你开始。身份决定初始人气、权力位阶与圈子加成。</div></div>'
+    +'<div class="opt-list">';
+  Object.keys(IDENT).forEach(function(k,idx){
     var d=IDENT[k];
-    h+='<div class="bg-item'+(NEWC.identity===k?' on':'')+'" data-id="'+k+'">'
-      +'<div class="bg-t">'+esc(d.name)+'</div>'
-      +'<div class="bg-d">'+esc(d.desc)+'</div></div>';
+    h+='<div class="opt-card'+(NEWC.identity===k?' on':'')+'" data-id="'+k+'">'
+      +'<span class="oc-idx">'+String(idx+1).padStart(2,'0')+'</span>'
+      +'<div class="oc-main">'
+      +'<div class="oc-t">'+esc(d.name)
+        +(d.circle?' <span class="oc-en">'+esc(d.circle)+'</span>':'')+'</div>'
+      +'<div class="oc-d">'+esc(d.desc)+'</div>'
+      +'</div></div>';
   });
-  h+='</div></div>';
+  h+='</div>';
   return h;
 }
 
 /* ---- 第3步：家庭 ---- */
 function setupFamBody(){
-  var h='<div class="card"><div class="view-t">★ 你的家庭背景</div>'
-    +'<div class="set-tip">从贫穷到豪门，1 → 6。它决定你的初始金钱与起点。</div>'
-    +'<div class="bg-list">';
-  FAM.forEach(function(f){
-    h+='<div class="bg-item'+(NEWC.family===f.n?' on':'')+'" data-fam="'+f.n+'">'
-      +'<div class="bg-t">'+f.n+' · '+esc(f.t)+' <span class="dim">起始 $'+f.money+'</span></div>'
-      +'<div class="bg-d">'+esc(f.d)+'</div></div>';
+  var h='<div class="step-hd"><span class="sh-no">STEP 03</span>'
+    +'<div class="sh-tt">你从哪儿来</div>'
+    +'<div class="sh-sub">从贫穷到豪门，六个起点。它决定你的初始金钱、零花钱与出身阵营。</div></div>'
+    +'<div class="opt-list">';
+  FAM.forEach(function(f,idx){
+    h+='<div class="opt-card'+(NEWC.family===f.n?' on':'')+'" data-fam="'+f.n+'">'
+      +'<span class="oc-idx">'+String(idx+1).padStart(2,'0')+'</span>'
+      +'<div class="oc-main">'
+      +'<div class="oc-t">'+esc(f.t)+' <span class="oc-money">起始 $'+f.money+'</span></div>'
+      +'<div class="oc-d">'+esc(f.d)+'</div>'
+      +'</div></div>';
   });
-  h+='</div></div>';
+  h+='</div>';
   return h;
 }
 
@@ -5320,42 +5535,49 @@ function chips(id,list,cur){
     + '</div>';
 }
 function setupProfileBody(){
-  return '<div class="card">'
-    +'<div class="view-t">★ 角色档案</div>'
+  function field(lab, inner, note){
+    return '<div class="pf-field">'
+      +'<span class="pf-lab">'+lab+'</span>'
+      +inner
+      +(note?'<div class="set-note">'+note+'</div>':'')
+      +'</div>';
+  }
+  return '<div class="step-hd"><span class="sh-no">STEP 04</span>'
+    +'<div class="sh-tt">你是谁</div>'
+    +'<div class="sh-sub">这些描述会被写进 AI 的记忆里，影响 NPC 对你的第一印象与对话走向。</div></div>'
 
-    +'<div class="set-lab">姓名</div>'
-    +'<input id="ncName" class="set-in" value="'+esc(NEWC.name||'')+'">'
-    +'<div class="chips" data-for="name"><button type="button" class="chip chip-rand" data-v="__RAND__">骰子 随机</button></div>'
+    +field('NAME · 姓名',
+      '<input id="ncName" class="set-in" value="'+esc(NEWC.name||'')+'" placeholder="输入名字">'
+      +'<div class="chips" data-for="name"><button type="button" class="chip chip-rand" data-v="__RAND__">骰子随机</button></div>')
 
-    +'<div class="set-lab">性别</div>'
-    +'<div class="chips" data-for="gender">'+chipsRaw('gender',GENDER_PRESET,NEWC.gender)+'</div>'
+    +field('GENDER · 性别',
+      '<div class="chips" data-for="gender">'+chipsRaw('gender',GENDER_PRESET,NEWC.gender)+'</div>')
 
-    +'<div class="set-lab">年龄</div>'
-    +'<input id="ncAge" class="set-in" type="number" value="'+(NEWC.age||16)+'">'
+    +field('AGE · 年龄',
+      '<input id="ncAge" class="set-in" type="number" value="'+(NEWC.age||16)+'">')
 
-    +'<div class="set-lab">外貌</div>'
-    +'<input id="ncApp" class="set-in" value="'+esc(NEWC.appearance||'')+'">'
-    +'<div class="set-note">影响 NPC 对你的态度</div>'
-    +chips('app',APP_PRESET,NEWC.appearance)
+    +field('LOOKS · 外貌',
+      '<input id="ncApp" class="set-in" value="'+esc(NEWC.appearance||'')+'" placeholder="例如：个子高、戴眼镜">'
+      +chips('app',APP_PRESET,NEWC.appearance),
+      '影响 NPC 对你的态度')
 
-    +'<div class="set-lab">性格</div>'
-    +'<input id="ncPer" class="set-in" value="'+esc(NEWC.personality||'')+'">'
-    +chips('per',PER_PRESET,NEWC.personality)
+    +field('PERSONALITY · 性格',
+      '<input id="ncPer" class="set-in" value="'+esc(NEWC.personality||'')+'" placeholder="例如：慢热">'
+      +chips('per',PER_PRESET,NEWC.personality))
 
-    +'<div class="set-lab">特长</div>'
-    +'<input id="ncTal" class="set-in" value="'+esc(NEWC.talent||'')+'">'
-    +chips('tal',TAL_PRESET,NEWC.talent)
+    +field('TALENT · 特长',
+      '<input id="ncTal" class="set-in" value="'+esc(NEWC.talent||'')+'" placeholder="例如：吉他">'
+      +chips('tal',TAL_PRESET,NEWC.talent))
 
-    +'<div class="set-lab">取向</div>'
-    +'<input id="ncOri" class="set-in" value="'+esc(NEWC.orientation||'')+'">'
-    +chips('ori',ORI_PRESET,NEWC.orientation)
+    +field('ORIENTATION · 取向',
+      '<input id="ncOri" class="set-in" value="'+esc(NEWC.orientation||'')+'">'
+      +chips('ori',ORI_PRESET,NEWC.orientation))
 
-    +'<div class="set-lab">社交风格</div>'
-    +'<input id="ncSoc" class="set-in" value="'+esc(NEWC.socialStyle||'')+'">'
-    +chips('soc',SOC_PRESET,NEWC.socialStyle)
+    +field('SOCIAL · 社交风格',
+      '<input id="ncSoc" class="set-in" value="'+esc(NEWC.socialStyle||'')+'">'
+      +chips('soc',SOC_PRESET,NEWC.socialStyle))
 
-    +'<button type="button" class="rand-btn" id="sRandAll">全部随机</button>'
-    +'</div>';
+    +'<button type="button" class="rand-btn" id="sRandAll">全部随机 →</button>';
 }
 function chipsRaw(id,list,cur){
   return list.map(function(v){
@@ -5369,35 +5591,43 @@ function setupSummaryBody(){
   var money=Math.round((d.money*0.4)+(fam.money*0.6));
   var pop=id.pop+d.fav;
   var fav=NPC_BASE_FAV || 0;
-  return '<div class="card"><div class="view-t">★ 初始状态总览</div>'
-    +'<div class="set-tip">根据你前四步的选择，系统已算出你的起点。</div>'
-    +'<div class="sum-grid">'
-    +'<div class="sum-row"><span>姓名</span><b>'+esc(NEWC.name||'（未填）')+'</b></div>'
-    +'<div class="sum-row"><span>性别 / 年龄</span><b>'+esc(NEWC.gender)+' / '+esc(String(NEWC.age||16))+'</b></div>'
-    +'<div class="sum-row"><span>难度</span><b>'+esc(d.name)+'</b></div>'
-    +'<div class="sum-row"><span>身份</span><b>'+esc(id.name)+'</b></div>'
-    +'<div class="sum-row"><span>权力位阶</span><b>'+esc(id.power||'普通学生')+'</b></div>'
-    +'<div class="sum-row"><span>阵营</span><b>'+esc((id.camp||fam.camp||'中立'))+'</b></div>'
-    +'<div class="sum-row"><span>家庭</span><b>'+fam.n+' · '+esc(fam.t)+'</b></div>'
-    +'<div class="sum-row"><span>起始金钱</span><b>$'+money+'</b></div>'
-    +'<div class="sum-row"><span>初始人气</span><b>'+pop+'</b></div>'
-    +'<div class="sum-row"><span>跟班</span><b>'+(id.followers||0)+' 人</b></div>'
-    +'<div class="sum-row" style="align-items:flex-start;"><span>圈子加成</span><b style="text-align:right;">'+
-      (function(){
-        var cb={},k;
-        var A=(id.circleBonus||{}),B=(fam.circleBonus||{});
-        for(k in A){ if(A.hasOwnProperty(k)) cb[k]=(cb[k]||0)+A[k]; }
-        for(k in B){ if(B.hasOwnProperty(k)) cb[k]=(cb[k]||0)+B[k]; }
-        var ks=Object.keys(cb);
-        if(!ks.length) return '无（干净开局）';
-        return ks.map(function(x){ return x+' +'+cb[x]; }).join(' · ');
-      })()
-    +'</b></div>'
-    +'<div class="sum-row"><span>NPC 初始好感</span><b>'+(fav>=0?'+':'')+fav+'</b></div>'
-    +(NEWC.appearance?'<div class="sum-row"><span>外貌</span><b>'+esc(NEWC.appearance)+'</b></div>':'')
-    +(NEWC.talent?'<div class="sum-row"><span>特长</span><b>'+esc(NEWC.talent)+'</b></div>':'')
+  function row(k,v){ return '<div class="sum-row"><span>'+k+'</span><b>'+v+'</b></div>'; }
+  var cbTxt=(function(){
+    var cb={},k;
+    var A=(id.circleBonus||{}),B=(fam.circleBonus||{});
+    for(k in A){ if(A.hasOwnProperty(k)) cb[k]=(cb[k]||0)+A[k]; }
+    for(k in B){ if(B.hasOwnProperty(k)) cb[k]=(cb[k]||0)+B[k]; }
+    var ks=Object.keys(cb);
+    if(!ks.length) return '无（干净开局）';
+    return ks.map(function(x){ return x+' +'+cb[x]; }).join(' · ');
+  })();
+  return '<div class="step-hd"><span class="sh-no">STEP 05</span>'
+    +'<div class="sh-tt">你的起点</div>'
+    +'<div class="sh-sub">根据前四步的选择算出。确认无误，就走进去。</div></div>'
+
+    +'<div class="sum-hl">'
+      +'<div class="shl-k">STARTING BALANCE · 起始现金</div>'
+      +'<div class="shl-v">$'+money+'</div>'
+      +'<div class="shl-s">'+esc((id.power||'普通学生'))+' · '+esc(fam.t)+' · 人气 '+pop+'</div>'
     +'</div>'
-    +'<div class="set-tip dim">确认无误后，走进 Northgate High。</div></div>';
+
+    +'<div class="sum-grid" style="margin-top:14px;">'
+    +row('姓名', esc(NEWC.name||'（未填）'))
+    +row('性别 / 年龄', esc(NEWC.gender||'—')+' / '+esc(String(NEWC.age||16)))
+    +row('难度', esc(d.name))
+    +row('身份', esc(id.name))
+    +row('权力位阶', esc(id.power||'普通学生'))
+    +row('阵营', esc((id.camp||fam.camp||'中立')))
+    +row('家庭', fam.n+' · '+esc(fam.t))
+    +row('初始人气', pop)
+    +row('跟班', (id.followers||0)+' 人')
+    +row('圈子加成', cbTxt)
+    +row('NPC 初始好感', (fav>=0?'+':'')+fav)
+    +(NEWC.appearance?row('外貌', esc(NEWC.appearance)):'')
+    +(NEWC.personality?row('性格', esc(NEWC.personality)):'')
+    +(NEWC.talent?row('特长', esc(NEWC.talent)):'')
+    +'</div>'
+    +'<div class="set-tip dim">确认无误后，走进 Northgate High。</div>';
 }
 
 /* ---- 开新档 ---- */
@@ -5493,11 +5723,12 @@ function bindSetup(){
   if(scroll) scroll.scrollTop=0;
 
   /* 第1~3步：卡片单选 → 记录 + 短暂高亮 → 自动进入下一步 */
-  $$('.bg-item').forEach(function(el){
+  var CARDS=$$('.opt-card').length?$$('.opt-card'):$$('.bg-item');
+  CARDS.forEach(function(el){
     el.onclick=function(){
-      if(el.dataset.diff){ NEWC.difficulty=el.dataset.diff; $$('.bg-item').forEach(function(x){x.classList.remove('on')}); el.classList.add('on'); }
-      else if(el.dataset.id){ NEWC.identity=el.dataset.id; $$('.bg-item').forEach(function(x){x.classList.remove('on')}); el.classList.add('on'); }
-      else if(el.dataset.fam){ NEWC.family=parseInt(el.dataset.fam,10); $$('.bg-item').forEach(function(x){x.classList.remove('on')}); el.classList.add('on'); }
+      if(el.dataset.diff){ NEWC.difficulty=el.dataset.diff; CARDS.forEach(function(x){x.classList.remove('on')}); el.classList.add('on'); }
+      else if(el.dataset.id){ NEWC.identity=el.dataset.id; CARDS.forEach(function(x){x.classList.remove('on')}); el.classList.add('on'); }
+      else if(el.dataset.fam){ NEWC.family=parseInt(el.dataset.fam,10); CARDS.forEach(function(x){x.classList.remove('on')}); el.classList.add('on'); }
       else return;
       autoNext();
     };
@@ -5506,6 +5737,11 @@ function bindSetup(){
   /* 性别：只记录，不自动跳（同页还有其他字段） */
   $$('#ncGender .seg-b').forEach(function(b){
     b.onclick=function(){ $$('#ncGender .seg-b').forEach(function(x){x.classList.remove('on')}); b.classList.add('on'); NEWC.gender=b.dataset.g; };
+  });
+
+  /* 性别 chips（第4步新版用 .chips[data-for=gender]） */
+  $$('.chips[data-for="gender"] .chip').forEach(function(b){
+    b.onclick=function(){ $$('.chips[data-for="gender"] .chip').forEach(function(x){x.classList.remove('on')}); b.classList.add('on'); NEWC.gender=b.dataset.v; };
   });
 
   
